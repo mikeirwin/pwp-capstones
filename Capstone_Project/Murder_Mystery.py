@@ -242,7 +242,7 @@ def frequency_comparison(table1, table2):
 
 def percent_difference(val1, val2):
     if val1 > 0 and val2 > 0:
-        difference = abs((val1 - val2) / (val1 + val2) / 2)
+        difference = abs(((val1 - val2) / (val1 + val2)) / 2)
     return difference
 
 
@@ -256,8 +256,7 @@ def find_text_similarity(sample1, sample2):
     ngram_difference = frequency_comparison(build_frequency_table(sample1.ngram),
                                             build_frequency_table(sample2.ngram))
     ngram_similarity = abs(1 - ngram_difference)
-    # ngram_similarity = abs(1 - ngram_difference)
-    similarity = (sentence_length_similarity + word_count_similarity + ngram_similarity) / 3
+    similarity = (sentence_length_similarity + word_count_difference+ ngram_difference) / 3
 
     return similarity
 
@@ -283,11 +282,11 @@ print("TEST: ")
 murder_sample = TextSample(murder_note, "Murder Note")
 print(murder_sample)
 lily_sample = TextSample(lily_trebuchet_intro, "Lily")
-print(lily_sample)
+# print(lily_sample)
 myrtle_sample = TextSample(myrtle_beech_intro, "Myrtle")
 # print(myrtle_sample)
 gregg_sample = TextSample(gregg_t_fishy_intro, "Gregg")
-# print(gregg_sample)
+print(gregg_sample)
 
 print("\nRESULTS:")
 print(murder_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, murder_sample)))
