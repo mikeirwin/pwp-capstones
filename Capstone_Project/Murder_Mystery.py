@@ -275,11 +275,11 @@ class TextSample:
 
     def __repr__(self):
         # TEST
-        return str(self.author) + "\n" + "Prepped text : \n" + str(self.prepared_text_alt) + "\n" + "Word count : \n" + str(self.word_count_frequency) + "\n" + "Ngrams : \n" + str(self.ngram)
-        return str(self.author) + ": \n" + str(self.prepared_text_alt) + "\n" + str(self.word_count_frequency) + "\n" + str(self.ngram)
+        return str(self.author) + "\n" + "Prepped text: \n" + str(self.prepared_text) + "\n" + "Word count: \n" + str(self.word_count_frequency) + "\n" + "Ngrams: \n" + str(self.ngram)
+        # return str(self.author) + ": \n" + str(self.prepared_text) + "\n" + str(self.word_count_frequency) + "\n" + str(self.ngram)
         # return str(self.author) + ": \nSimilarity: " + str(find_text_similarity(murder_sample, self))
 
-
+print("TEST: ")
 murder_sample = TextSample(murder_note, "Murder Note")
 print(murder_sample)
 lily_sample = TextSample(lily_trebuchet_intro, "Lily")
@@ -289,7 +289,7 @@ myrtle_sample = TextSample(myrtle_beech_intro, "Myrtle")
 gregg_sample = TextSample(gregg_t_fishy_intro, "Gregg")
 # print(gregg_sample)
 
-print("TEST:")
+print("\nRESULTS:")
 print(murder_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, murder_sample)))
 print(lily_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, lily_sample)))
 print(myrtle_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, myrtle_sample)))
