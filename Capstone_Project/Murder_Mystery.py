@@ -64,6 +64,27 @@ gregg_t_fishy_intro = "A good day to you all, I am Gregg T Fishy, of the Fishy E
                       "Brand New Jay. It certainly seems like a grand time to explore life and love."
 
 
+def get_sentences_in_text2(text):
+    sentence_count = 0
+    word_count = 0
+
+    string = text.replace(".", "+")
+    string2 = string.replace("!", "+")
+    string3 = string2.replace("?", "+")
+    sentences_in_text = string3.split("+")
+
+    for sentence in sentences_in_text:
+        n = len(sentence.split())
+        if n > 0:
+            sentence_count += 1
+        word_count += 1
+
+    if sentence_count > 0:
+        avg = word_count / sentence_count
+
+    return avg
+
+
 def get_sentences_in_text(text):
     string = text.replace(".", "+")
     string2 = string.replace("!", "+")
@@ -192,10 +213,8 @@ def build_frequency_table(corpus):
 def ngram_creator(text_list):
 
     pairs = []
-    for word in text_list:
-        pair = text_list[0] + " " + text_list[1]
-        pairs.append(pair)
-        text_list.remove(text_list[0])
+    for el in range(0, len(text_list) - 1):
+        pairs.append(text_list[el] + ' ' + text_list[el + 1])
     return pairs
 
 
@@ -209,22 +228,21 @@ def frequency_comparison(table1, table2):
                 mutual_appearances += table2[key]
             else:
                 appearances += table2[key]
-                mutual_appearances += table1[key]
         else:
             appearances += table1[key]
     for key in table2:
         if key not in table1:
             appearances += table2[key]
     # conditional for comparing identical lists
-    if appearances <= 0:
-        appearances = mutual_appearances
+    if appearances > 0:
+        frequency = mutual_appearances / appearances
 
-    frequency = mutual_appearances / appearances
     return frequency
 
 
 def percent_difference(val1, val2):
-    difference = abs((val1 - val2) / ((val1 + val2) / 2))
+    if val1 > 0 and val2 > 0:
+        difference = abs((val1 - val2) / (val1 + val2) / 2)
     return difference
 
 
@@ -233,13 +251,13 @@ def find_text_similarity(sample1, sample2):
     sentence_length_similarity = abs(1 - sentence_length_difference)
 
     word_count_difference = frequency_comparison(sample1.word_count_frequency, sample2.word_count_frequency)
-    # word_count_similarity = abs(1 - word_count_difference)
+    word_count_similarity = abs(1 - word_count_difference)
 
     ngram_difference = frequency_comparison(build_frequency_table(sample1.ngram),
                                             build_frequency_table(sample2.ngram))
+    ngram_similarity = abs(1 - ngram_difference)
     # ngram_similarity = abs(1 - ngram_difference)
-    # ngram_similarity = abs(1 - ngram_difference)
-    similarity = (sentence_length_similarity + word_count_difference + ngram_difference) / 3
+    similarity = (sentence_length_similarity + word_count_similarity + ngram_similarity) / 3
 
     return similarity
 
@@ -251,15 +269,15 @@ class TextSample:
         self.author = author
         self.prepared_text_alt = prepare_text_alt(self.raw_text)
         self.prepared_text = prepare_text(self.raw_text)
-        self.average_sentence_length = get_sentences_in_text(self.raw_text)
-        self.word_count_frequency = build_frequency_table(self.prepared_text_alt)
-        self.ngram = ngram_creator(self.prepared_text_alt)
+        self.average_sentence_length = get_sentences_in_text2(self.raw_text)
+        self.word_count_frequency = build_frequency_table(self.prepared_text)
+        self.ngram = ngram_creator(self.prepared_text)
 
     def __repr__(self):
         # TEST
-        # return str(self.author) + "\n" + "Prepped text : \n" + str(self.prepared_text_alt) + "\n" + "Word count : \n" + str(self.word_count_frequency) + "\n" + "Ngrams : \n" + str(self.ngram)
-        # return str(self.author) + ": \n" + str(self.prepared_text_alt) + "\n" + str(self.word_count_frequency) + "\n" + str(self.ngram)
-        return str(self.author) + ": \nSimilarity: " + str(find_text_similarity(murder_sample, self))
+        return str(self.author) + "\n" + "Prepped text : \n" + str(self.prepared_text_alt) + "\n" + "Word count : \n" + str(self.word_count_frequency) + "\n" + "Ngrams : \n" + str(self.ngram)
+        return str(self.author) + ": \n" + str(self.prepared_text_alt) + "\n" + str(self.word_count_frequency) + "\n" + str(self.ngram)
+        # return str(self.author) + ": \nSimilarity: " + str(find_text_similarity(murder_sample, self))
 
 
 murder_sample = TextSample(murder_note, "Murder Note")
@@ -267,15 +285,15 @@ print(murder_sample)
 lily_sample = TextSample(lily_trebuchet_intro, "Lily")
 print(lily_sample)
 myrtle_sample = TextSample(myrtle_beech_intro, "Myrtle")
-print(myrtle_sample)
+# print(myrtle_sample)
 gregg_sample = TextSample(gregg_t_fishy_intro, "Gregg")
-print(gregg_sample)
+# print(gregg_sample)
 
-# print("TEST:)
-# print(murder_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, murder_sample)))
-# print(lily_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, lily_sample)))
-# print(myrtle_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, myrtle_sample)))
-# print(gregg_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, gregg_sample)))
+print("TEST:")
+print(murder_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, murder_sample)))
+print(lily_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, lily_sample)))
+print(myrtle_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, myrtle_sample)))
+print(gregg_sample.author + ", \nSimilarity: " + str(find_text_similarity(murder_sample, gregg_sample)))
 
 # print(frequency_comparison(murder_sample.word_count_frequency, murder_sample.word_count_frequency))
 
